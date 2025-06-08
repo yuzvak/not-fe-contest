@@ -1,0 +1,328 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Default Dark Theme */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 100%;
+    --radius: 0.5rem;
+
+    /* Telegram Safe Area Variables */
+    --tg-safe-area-inset-top: 0px;
+    --tg-safe-area-inset-bottom: 0px;
+    --tg-safe-area-inset-left: 0px;
+    --tg-safe-area-inset-right: 0px;
+    --tg-content-safe-area-inset-top: 0px;
+    --tg-content-safe-area-inset-bottom: 0px;
+    --tg-content-safe-area-inset-left: 0px;
+    --tg-content-safe-area-inset-right: 0px;
+
+    /* Telegram Theme Variables */
+    --tg-bg-color: #000000;
+    --tg-text-color: #ffffff;
+    --tg-button-color: #ffffff;
+    --tg-button-text-color: #000000;
+    --tg-secondary-bg-color: #1a1a1a;
+    --tg-hint-color: #999999;
+    --tg-link-color: #6ab3f3;
+    --tg-destructive-color: #ec3942;
+    --tg-header-bg-color: #000000;
+    --tg-bottom-bar-bg-color: #000000;
+  }
+
+  /* Light Theme */
+  [data-theme="light"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+
+    /* Light Theme Telegram Variables */
+    --tg-bg-color: #ffffff;
+    --tg-text-color: #000000;
+    --tg-button-color: #007aff;
+    --tg-button-text-color: #ffffff;
+    --tg-secondary-bg-color: #f7f7f7;
+    --tg-hint-color: #999999;
+    --tg-link-color: #007aff;
+    --tg-destructive-color: #ff3b30;
+    --tg-header-bg-color: #ffffff;
+    --tg-bottom-bar-bg-color: #ffffff;
+  }
+
+  /* Auto Theme Detection */
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+      --background: 0 0% 100%;
+      --foreground: 0 0% 3.9%;
+      --card: 0 0% 100%;
+      --card-foreground: 0 0% 3.9%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 0 0% 3.9%;
+      --primary: 0 0% 9%;
+      --primary-foreground: 0 0% 98%;
+      --secondary: 0 0% 96.1%;
+      --secondary-foreground: 0 0% 9%;
+      --muted: 0 0% 96.1%;
+      --muted-foreground: 0 0% 45.1%;
+      --accent: 0 0% 96.1%;
+      --accent-foreground: 0 0% 9%;
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 0 0% 98%;
+      --border: 0 0% 89.8%;
+      --input: 0 0% 89.8%;
+      --ring: 0 0% 3.9%;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    /* Отключаем выделение текста везде */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    /* Применяем safe area для всего body */
+    padding-top: var(--tg-safe-area-inset-top);
+    padding-bottom: var(--tg-safe-area-inset-bottom);
+    padding-left: var(--tg-safe-area-inset-left);
+    padding-right: var(--tg-safe-area-inset-right);
+
+    /* Используем Telegram цвета как основные */
+    background-color: var(--tg-bg-color);
+    color: var(--tg-text-color);
+  }
+}
+
+/* Safe Area Utility Classes */
+@layer utilities {
+  .safe-area-top {
+    padding-top: var(--tg-safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: var(--tg-safe-area-inset-bottom);
+  }
+
+  .safe-area-left {
+    padding-left: var(--tg-safe-area-inset-left);
+  }
+
+  .safe-area-right {
+    padding-right: var(--tg-safe-area-inset-right);
+  }
+
+  .safe-area-x {
+    padding-left: var(--tg-safe-area-inset-left);
+    padding-right: var(--tg-safe-area-inset-right);
+  }
+
+  .safe-area-y {
+    padding-top: var(--tg-safe-area-inset-top);
+    padding-bottom: var(--tg-safe-area-inset-bottom);
+  }
+
+  .safe-area {
+    padding-top: var(--tg-safe-area-inset-top);
+    padding-bottom: var(--tg-safe-area-inset-bottom);
+    padding-left: var(--tg-safe-area-inset-left);
+    padding-right: var(--tg-safe-area-inset-right);
+  }
+
+  /* Content Safe Area */
+  .content-safe-area-top {
+    padding-top: var(--tg-content-safe-area-inset-top);
+  }
+
+  .content-safe-area-bottom {
+    padding-bottom: var(--tg-content-safe-area-inset-bottom);
+  }
+
+  .content-safe-area-left {
+    padding-left: var(--tg-content-safe-area-inset-left);
+  }
+
+  .content-safe-area-right {
+    padding-right: var(--tg-content-safe-area-inset-right);
+  }
+
+  .content-safe-area-x {
+    padding-left: var(--tg-content-safe-area-inset-left);
+    padding-right: var(--tg-content-safe-area-inset-right);
+  }
+
+  .content-safe-area-y {
+    padding-top: var(--tg-content-safe-area-inset-top);
+    padding-bottom: var(--tg-content-safe-area-inset-bottom);
+  }
+
+  .content-safe-area {
+    padding-top: var(--tg-content-safe-area-inset-top);
+    padding-bottom: var(--tg-content-safe-area-inset-bottom);
+    padding-left: var(--tg-content-safe-area-inset-left);
+    padding-right: var(--tg-content-safe-area-inset-right);
+  }
+
+  /* Margin variants */
+  .safe-area-margin-top {
+    margin-top: var(--tg-safe-area-inset-top);
+  }
+
+  .safe-area-margin-bottom {
+    margin-bottom: var(--tg-safe-area-inset-bottom);
+  }
+
+  .safe-area-margin-left {
+    margin-left: var(--tg-safe-area-inset-left);
+  }
+
+  .safe-area-margin-right {
+    margin-right: var(--tg-safe-area-inset-right);
+  }
+
+  /* Fixed positioning with safe area */
+  .fixed-safe-top {
+    position: fixed;
+    top: var(--tg-safe-area-inset-top);
+  }
+
+  .fixed-safe-bottom {
+    position: fixed;
+    bottom: var(--tg-safe-area-inset-bottom);
+  }
+
+  .fixed-safe-left {
+    position: fixed;
+    left: var(--tg-safe-area-inset-left);
+  }
+
+  .fixed-safe-right {
+    position: fixed;
+    right: var(--tg-safe-area-inset-right);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Telegram Theme Utilities */
+  .bg-tg-bg {
+    background-color: var(--tg-bg-color);
+  }
+
+  .text-tg-text {
+    color: var(--tg-text-color);
+  }
+
+  .bg-tg-button {
+    background-color: var(--tg-button-color);
+  }
+
+  .text-tg-button {
+    color: var(--tg-button-text-color);
+  }
+
+  .bg-tg-secondary {
+    background-color: var(--tg-secondary-bg-color);
+  }
+
+  .text-tg-hint {
+    color: var(--tg-hint-color);
+  }
+
+  .text-tg-link {
+    color: var(--tg-link-color);
+  }
+
+  .text-tg-destructive {
+    color: var(--tg-destructive-color);
+  }
+
+  .bg-tg-header {
+    background-color: var(--tg-header-bg-color);
+  }
+
+  .bg-tg-bottom-bar {
+    background-color: var(--tg-bottom-bar-bg-color);
+  }
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+}
+
+/* Theme transition animations */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

@@ -59,7 +59,7 @@ Next.js provides the perfect foundation for this Telegram Mini App because:
 
 ### Prerequisites
 - Node.js 18+ 
-- npm, yarn, or pnpm
+- npm, yarn
 
 ### Installation & Setup
 
@@ -72,16 +72,11 @@ cd not-store
 npm install
 # or
 yarn install
-# or
-pnpm install
 
 # Run the development server
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the app.
 

@@ -37,7 +37,7 @@ export function TonConnectProvider({ children }: { children: React.ReactNode }) 
   const [error, setError] = useState<string | null>(null)
   const [wallets, setWallets] = useState<any[]>([])
 
-  const manifestUrl = "https://b90b-178-136-46-243.ngrok-free.app/tonconnect-manifest.json"
+  const manifestUrl = "https://not-fe-contest-bice.vercel.app/tonconnect-manifest.json"
 
   useEffect(() => {
     let unsubscribe: (() => void) | null = null

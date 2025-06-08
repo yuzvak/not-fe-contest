@@ -16,7 +16,7 @@ export const usePurchaseFlow = (onComplete?: () => void) => {
     
     setIsProcessing(true);
     try {
-      await sendTransaction({
+      const result = await sendTransaction({
         validUntil: Math.floor(Date.now() / 1000) + 60,
         messages: [
           {
@@ -26,8 +26,11 @@ export const usePurchaseFlow = (onComplete?: () => void) => {
         ]
       });
       
-      clearCart();
-      setPurchaseSuccess(true);
+      // Only clear cart if transaction was successful
+      if (result && result.success) {
+        clearCart();
+        setPurchaseSuccess(true);
+      }
       setPendingPurchase(false);
     } catch (error) {
       console.error('Transaction failed:', error);

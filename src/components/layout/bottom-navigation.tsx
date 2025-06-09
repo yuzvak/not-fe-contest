@@ -82,7 +82,7 @@ export function BottomNavigation() {
 
   return (
     <motion.nav
-      className="fixed bottom-0 left-0 right-0 border-t safe-area-bottom safe-area-x px-4"
+      className="fixed bottom-0 left-0 right-0 border-t safe-area-bottom px-4"
       style={{
         backgroundColor: headerBg,
         borderTopColor: borderColor,

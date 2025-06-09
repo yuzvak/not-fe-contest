@@ -108,14 +108,15 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
 
   useEffect(() => {
     const handleBackButtonClick = () => {
-      if (isFullscreenOpen) {
-        handleCloseFullscreen()
-        return false
-      } else {
-        hapticFeedback("impact", "light")
-        router.push('/')
-      }
+    if (isFullscreenOpen) {
+      handleCloseFullscreen()
+      return false
+    } else {
+      hapticFeedback("impact", "light")
+      router.push('/')
+      return false
     }
+  }
 
     showBackButton(handleBackButtonClick)
 

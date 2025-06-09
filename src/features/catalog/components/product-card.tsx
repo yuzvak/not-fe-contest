@@ -174,14 +174,14 @@ function ProductCardComponent({
     if (product.images.length <= 1) return
 
     hapticFeedback("selection")
-    setCurrentImage((prev) => (prev + 1) % Math.min(product.images.length, 4))
+    setCurrentImage((prev) => (prev + 1) % product.images.length)
   }
 
   const prevImage = () => {
     if (product.images.length <= 1) return
 
     hapticFeedback("selection")
-    setCurrentImage((prev) => (prev - 1 + Math.min(product.images.length, 4)) % Math.min(product.images.length, 4))
+    setCurrentImage((prev) => (prev - 1 + product.images.length) % product.images.length)
   }
 
   const handleCheckboxClick = (e: React.MouseEvent) => {
@@ -243,7 +243,7 @@ function ProductCardComponent({
         onTouchEnd={handleTouchEnd}
       >
         <div className="relative w-full h-full">
-          {product.images.slice(0, 4).map((image, idx) => (
+          {product.images.map((image, idx) => (
             <div
               key={idx}
               className="absolute inset-0 w-full h-full transition-opacity duration-300"
@@ -309,7 +309,7 @@ function ProductCardComponent({
 
         {product.images.length > 1 && !isSelectionMode && (
           <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
-            {product.images.slice(0, 4).map((_, imgIndex) => (
+            {product.images.map((_, imgIndex) => (
               <div
                 key={imgIndex}
                 className={`h-1 rounded-full ${imgIndex === currentImage ? "w-6 bg-white" : "w-1 bg-white/50"}`}

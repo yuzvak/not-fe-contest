@@ -217,7 +217,7 @@ export default function AccountPage() {
       day: "2-digit",
       month: "short",
       year: "2-digit",
-    })
+    }).replace(/\s/g, " ").replace(/(\d{2})\s(\w{3})\s(\d{2})/, "$1 $2 '$3")
   }
 
   const getProductById = (id: number) => {
@@ -410,10 +410,10 @@ export default function AccountPage() {
                       className="w-16 h-16 flex-shrink-0"
                     />
                     <div className="flex-1">
-                      <div className="text-sm" style={{ color: hintColor }}>
+                      <div className="text-sm font-medium" style={{ color: hintColor }}>
                         {product?.category || "product"}
                       </div>
-                      <h3 className="font-medium" style={{ color: textColor }}>
+                      <h3 className="text-lg font-medium mb-0.5 line-clamp-1" style={{ color: textColor }}>
                         {product?.name || `Order #${item.id}`}
                       </h3>
                     </div>
@@ -421,8 +421,11 @@ export default function AccountPage() {
                       <div className="text-sm" style={{ color: hintColor }}>
                         {formatDate(item.timestamp)}
                       </div>
-                      <div className="font-bold" style={{ color: textColor }}>
-                        {item.total} {item.currency}
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg font-bold" style={{ color: textColor }}>
+                          {item.total}
+                        </span>
+                        <span style={{ color: hintColor }}>{item.currency}</span>
                       </div>
                     </div>
                   </motion.div>

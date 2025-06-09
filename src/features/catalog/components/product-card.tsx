@@ -198,19 +198,6 @@ function ProductCardComponent({
   }
 
   const formatProductName = (name: string, category: string) => {
-    if (name === "boxlogo" && category === "hoodie") {
-      return "t-shirt boxlogo"
-    }
-    if (name === "physics" && category === "hoodie") {
-      return "hoodie physics"
-    }
-    if (name === "4 hounds" && category === "longsleeve") {
-      return "longsleeve 4 hounds"
-    }
-    if (name === "not or never" && category === "longsleeve") {
-      return "not cap not c..."
-    }
-
     return `${category} ${name}`
   }
 

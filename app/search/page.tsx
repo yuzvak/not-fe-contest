@@ -239,13 +239,16 @@ export default function SearchPage() {
                     />
                   </div>
 
-                  <h3 className="font-medium text-base" style={{ color: textColor }}>
+                  <h3 className="text-lg font-medium mb-0.5 line-clamp-1" style={{ color: textColor }}>
                     {product.category} {product.name}
                   </h3>
 
-                  <p className="text-lg" style={{ color: textColor }}>
-                    {product.price} <span className="text-gray-400">{product.currency}</span>
-                  </p>
+                  <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold" style={{ color: textColor }}>
+                    {product.price}
+                  </span>
+                  <span style={{ color: hintColor }}>{product.currency}</span>
+                </div>
                 </motion.div>
               ))}
             </motion.div>

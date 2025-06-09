@@ -73,10 +73,6 @@ export default function SearchPage() {
     setQuery("")
   }
 
-  const formatPrice = (price: number) => {
-    return (price / 1000).toFixed(0)
-  }
-
   const showNoResults = query && !isSearching && filteredProducts.length === 0
   const showResults = !isSearching && (query ? filteredProducts.length > 0 : products.length > 0)
   const resultsToShow = query ? filteredProducts : products
@@ -248,7 +244,7 @@ export default function SearchPage() {
                   </h3>
 
                   <p className="text-lg font-bold" style={{ color: textColor }}>
-                    {formatPrice(product.price)} <span className="text-gray-400">{product.currency}</span>
+                    {product.price} <span className="text-gray-400">{product.currency}</span>
                   </p>
                 </motion.div>
               ))}

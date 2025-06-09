@@ -8,7 +8,7 @@ export const APP_CONFIG = {
   NAME: "Not Store",
   DESCRIPTION: "Telegram Mini App Store",
   CURRENCY: "NOT",
-  PRICE_DIVISOR: 1000,
+  PRICE_DIVISOR: 1,
   CACHE_TTL: 60 * 5,
 } as const
 

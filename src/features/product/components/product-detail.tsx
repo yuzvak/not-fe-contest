@@ -38,6 +38,7 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
   const [isWideScreen, setIsWideScreen] = useState(false)
   const [isFullscreenOpen, setIsFullscreenOpen] = useState(false)
   const [fullscreenImageIndex, setFullscreenImageIndex] = useState(0)
+  const [stockError, setStockError] = useState(false)
 
   const imageContainerRef = useRef<HTMLDivElement>(null)
 
@@ -127,6 +128,14 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
 
   const handleAddToCart = () => {
     hapticFeedback("impact", "medium")
+    
+    if (product.left <= 0) {
+      setStockError(true)
+      setTimeout(() => setStockError(false), 3000)
+      hapticFeedback("notification", "error")
+      return
+    }
+    
     addToCart(product)
     setAddedToCart(true)
     setTimeout(() => {
@@ -136,6 +145,14 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
 
   const handleIncreaseQuantity = () => {
     hapticFeedback("impact", "light")
+    
+    if (quantity >= product.left) {
+      setStockError(true)
+      setTimeout(() => setStockError(false), 3000)
+      hapticFeedback("notification", "error")
+      return
+    }
+    
     if (isInCart) {
       updateQuantity(product.id, quantity + 1)
     } else {
@@ -354,19 +371,6 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
   }
 
   const formatProductName = (name: string, category: string) => {
-    if (name === "boxlogo" && category === "hoodie") {
-      return "t-shirt boxlogo"
-    }
-    if (name === "physics" && category === "hoodie") {
-      return "hoodie physics"
-    }
-    if (name === "4 hounds" && category === "longsleeve") {
-      return "longsleeve 4 hounds"
-    }
-    if (name === "not or never" && category === "longsleeve") {
-      return "not cap not c..."
-    }
-
     return `${category} ${name}`
   }
 
@@ -655,7 +659,7 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
                   backgroundColor: buyNowBgColor,
                   color: buyNowTextColor,
                 }}
-                initial={{ scale: 0.5, y: 50 }}
+                initial={{ scale: 1, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.5, y: 50 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
@@ -798,6 +802,42 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
                 {fullscreenImageIndex + 1} / {product.images.length}
               </span>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Stock Error Message */}
+      <AnimatePresence>
+        {stockError && (
+
+          <motion.div
+            className="fixed bottom-20 left-4 right-4 z-50 p-4 rounded-2xl shadow-lg"
+            style={{
+              backgroundColor: "#FF3B30",
+              color: "#FFFFFF",
+            }}
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="font-medium text-sm">Not enough stock</p>
+                <p className="text-xs opacity-90">Only {product.left} left</p>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

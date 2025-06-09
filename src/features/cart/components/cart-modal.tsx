@@ -300,12 +300,20 @@ export function CartModal() {
 
                         <div className="text-right">
                           {item.quantity > 1 && (
-                            <div className="text-sm" style={{ color: hintColor }}>
-                              {formatPrice(item.price)} each
+                            <div className="flex text-sm justify-end gap-2">
+                              <span style={{ color: textColor }}>
+                                {item.price}
+                              </span>
+                              <span style={{ color: hintColor }}> x {item.quantity}</span>
                             </div>
                           )}
-                          <div className="font-bold" style={{ color: textColor }}>
-                            {formatPrice(item.price * item.quantity)} {item.currency}
+                          <div className="text-right" style={{ color: textColor }}>
+                            <div className="flex gap-2 justify-end">
+                              <span className="font-bold" style={{ color: textColor }}>
+                                {item.price * item.quantity}
+                              </span>
+                              <span style={{ color: hintColor }}>{item.currency}</span>
+                            </div>
                           </div>
                         </div>
 

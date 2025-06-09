@@ -75,36 +75,15 @@ export function CartModal() {
   useEffect(() => {
     if (isCartOpen) {
       setIsClosing(false)
-    }
-  }, [isCartOpen])
-
-  useEffect(() => {
-    if (isCartOpen) {
-      const scrollY = window.scrollY
-      document.body.style.position = "fixed"
-      document.body.style.top = `-${scrollY}px`
-      document.body.style.width = "100%"
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = 'hidden'
     } else {
-      const scrollY = document.body.style.top
-      document.body.style.position = ""
-      document.body.style.top = ""
-      document.body.style.width = ""
-      document.body.style.overflow = ""
-      if (scrollY) {
-        window.scrollTo(0, Number.parseInt(scrollY || "0") * -1)
-      }
+      document.body.style.overflow = 'unset'
     }
 
     return () => {
-      document.body.style.position = ""
-      document.body.style.top = ""
-      document.body.style.width = ""
-      document.body.style.overflow = ""
+      document.body.style.overflow = 'unset'
     }
   }, [isCartOpen])
-
-
 
   const handleRemoveItem = (id: number) => {
     hapticFeedback("impact", "medium")
@@ -240,7 +219,7 @@ export function CartModal() {
               exit={{ y: "100%", opacity: 0 }}
               transition={{
                 duration: 0.3,
-                ease: [0.25, 0.46, 0.45, 0.94],
+                ease: [0.25, 0.46, 0.45, 0.94], // Более плавная кривая анимации
                 opacity: { duration: 0.25 },
               }}
               onClick={(e) => e.stopPropagation()}

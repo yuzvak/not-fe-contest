@@ -33,8 +33,6 @@ export class HistoryAPI {
         throw new Error("Invalid JSON response from history API")
       }
 
-      console.log("✅ History parsed data:", data)
-
       if (!data.ok) {
         throw new Error(data.error || "History API returned error")
       }

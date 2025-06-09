@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Header } from "@/components/layout/header"
 import { BottomNavigation } from "@/components/layout/bottom-navigation"
 import { ProductGrid } from "@/features/catalog/components/product-grid"
@@ -13,6 +14,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import type { Product } from "@/types"
 
 export default function HomePage() {
+  const router = useRouter()
   const fetchProducts = useStore((state) => state.fetchProducts)
   const products = useStore((state) => state.products)
   const isLoading = useStore((state) => state.isLoading)
@@ -47,7 +49,18 @@ export default function HomePage() {
       error,
     })
 
-  }, [hideBackButton, requestFullscreen])
+    if (typeof window !== "undefined" && window.Telegram?.WebApp) {
+      const webApp = window.Telegram.WebApp
+      const startParam = webApp.initDataUnsafe?.start_param
+      
+      if (startParam && startParam.startsWith("product_")) {
+        const productId = startParam.replace("product_", "")
+        console.log("🔗 Opening product from start param:", productId)
+        router.push(`/product/${productId}`)
+      }
+    }
+
+  }, [hideBackButton, requestFullscreen, router])
 
   useEffect(() => {
     if (products.length > 0 && !hasInitiallyLoaded) {

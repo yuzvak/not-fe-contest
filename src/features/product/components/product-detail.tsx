@@ -199,11 +199,11 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
       if (typeof window !== "undefined" && window.Telegram?.WebApp) {
         const webApp = window.Telegram.WebApp
 
-        const shareUrl = `${window.location.origin}/product/${product.id}`
+        const botUrl = `https://t.me/not_store_test_bot?startapp=product_${product.id}`
 
         const shareText = `🛍️ Check out this ${product.category}: ${product.name}\n💰 Price: ${formattedPrice} ${product.currency}`
 
-        const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`
+        const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent(shareText)}`
 
         webApp.openTelegramLink(telegramShareUrl)
         console.log("✅ Product shared via Telegram")
@@ -232,11 +232,12 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
       const shareText = `🛍️ Check out this ${product.category}: ${product.name}\n💰 Price: ${formattedPrice} ${product.currency}\n\n🔗 View in Not Store`
 
       if (navigator.share) {
+        const botUrl = `https://t.me/not_store_test_bot?startapp=product_${product.id}`
         navigator
           .share({
             title: `${product.category} ${product.name}`,
             text: shareText,
-            url: window.location.href,
+            url: botUrl,
           })
           .then(() => {
             console.log("✅ Product shared via Web Share API")

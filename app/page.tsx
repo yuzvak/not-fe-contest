@@ -298,7 +298,7 @@ export default function HomePage() {
       <AnimatePresence>
         {isSelectionMode && selectedProducts.length > 0 ? (
           <motion.div
-            className="fixed bottom-0 left-0 right-0 p-4 border-t safe-area-bottom safe-area-x"
+            className="fixed bottom-0 left-0 right-0 p-4 border-t safe-area-bottom px-4"
             style={{
               backgroundColor: bgColor,
               borderTopColor: themeParams.secondary_bg_color || (colorScheme === "light" ? "#f7f7f7" : "#1a1a1a"),

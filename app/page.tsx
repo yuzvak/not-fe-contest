@@ -27,7 +27,12 @@ export default function HomePage() {
 
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
-  const [hasProcessedStartParam, setHasProcessedStartParam] = useState(false)
+  const [hasProcessedStartParam, setHasProcessedStartParam] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem('hasProcessedStartParam') === 'true'
+    }
+    return false
+  })
 
   const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false)
   const bgColor = colorScheme === "light" ? "#ffffff" : "#000000"
@@ -58,11 +63,12 @@ export default function HomePage() {
         const productId = startParam.replace("product_", "")
         console.log("🔗 Opening product from start param:", productId)
         setHasProcessedStartParam(true)
+        sessionStorage.setItem('hasProcessedStartParam', 'true')
         router.push(`/product/${productId}`)
       }
     }
 
-  }, [hideBackButton, requestFullscreen, router, hasProcessedStartParam])
+  }, [hideBackButton, requestFullscreen, router])
 
   useEffect(() => {
     if (products.length > 0 && !hasInitiallyLoaded) {

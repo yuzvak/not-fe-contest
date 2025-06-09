@@ -24,27 +24,26 @@ export function AppLoader({ isVisible }: AppLoaderProps) {
             backgroundColor: bgColor,
           }}
           initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
           {/* App Icon */}
           <motion.div
             className="mb-8"
-            initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{
-              duration: 0.6,
+              duration: 0.3,
               ease: "easeOut",
-              delay: 0.2,
             }}
           >
             <motion.div
               animate={{
-                scale: [1, 1.05, 1],
-                rotate: [0, 2, -2, 0],
+                scale: [1, 1.02, 1],
+                y: [0, -2, 0],
               }}
               transition={{
-                duration: 3,
+                duration: 2.5,
                 repeat: Number.POSITIVE_INFINITY,
                 ease: "easeInOut",
               }}
@@ -79,11 +78,9 @@ export function AppLoader({ isVisible }: AppLoaderProps) {
           <motion.h1
             className="text-4xl font-bold mb-4"
             style={{ color: textColor }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.5,
-              delay: 0.4,
+              duration: 0.3,
             }}
           >
             Not Store
@@ -93,11 +90,9 @@ export function AppLoader({ isVisible }: AppLoaderProps) {
           <motion.p
             className="text-lg mb-8"
             style={{ color: hintColor }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.5,
-              delay: 0.6,
+              duration: 0.3,
             }}
           >
             Loading your experience...
@@ -105,31 +100,63 @@ export function AppLoader({ isVisible }: AppLoaderProps) {
 
           {/* Loading Dots */}
           <motion.div
-            className="flex gap-2"
+            className="relative w-32 h-4 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
-              duration: 0.5,
-              delay: 0.8,
+              duration: 0.3,
             }}
           >
-            {[0, 1, 2].map((index) => (
-              <motion.div
-                key={index}
-                className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: iconColor }}
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Number.POSITIVE_INFINITY,
-                  delay: index * 0.2,
-                  ease: "easeInOut",
-                }}
-              />
-            ))}
+            <div 
+              className="dot-floating"
+              style={{
+                position: 'relative',
+                width: '10px',
+                height: '10px',
+                borderRadius: '5px',
+                backgroundColor: iconColor,
+                animation: 'dot-floating 3s infinite cubic-bezier(0.15, 0.6, 0.9, 0.1)'
+              }}
+            >
+              <style jsx>{`
+                .dot-floating::before,
+                .dot-floating::after {
+                  content: "";
+                  display: inline-block;
+                  position: absolute;
+                  top: 0;
+                  width: 10px;
+                  height: 10px;
+                  border-radius: 5px;
+                  background-color: ${iconColor};
+                }
+                .dot-floating::before {
+                  left: -12px;
+                  animation: dot-floating-before 3s infinite ease-in-out;
+                }
+                .dot-floating::after {
+                  left: -24px;
+                  animation: dot-floating-after 3s infinite cubic-bezier(0.4, 0, 1, 1);
+                }
+                @keyframes dot-floating {
+                  0% { left: calc(-50% - 5px); }
+                  75% { left: calc(50% + 105px); }
+                  100% { left: calc(50% + 105px); }
+                }
+                @keyframes dot-floating-before {
+                  0% { left: -50px; }
+                  50% { left: -12px; }
+                  75% { left: -50px; }
+                  100% { left: -50px; }
+                }
+                @keyframes dot-floating-after {
+                  0% { left: -100px; }
+                  50% { left: -24px; }
+                  75% { left: -100px; }
+                  100% { left: -100px; }
+                }
+              `}</style>
+            </div>
           </motion.div>
         </motion.div>
       )}

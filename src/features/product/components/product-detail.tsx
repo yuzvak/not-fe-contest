@@ -113,7 +113,7 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
         return false
       } else {
         hapticFeedback("impact", "light")
-        router.back()
+        router.push('/')
       }
     }
 

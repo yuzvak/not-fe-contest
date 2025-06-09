@@ -316,8 +316,8 @@ export default function AccountPage() {
               key="skeleton"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
             >
               <HistorySkeleton />
             </motion.div>
@@ -342,10 +342,10 @@ export default function AccountPage() {
             <motion.div 
               key="history"
               className="space-y-4"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 25 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
             >
               {history.slice(0, displayedItemsCount).map((item, index) => {
                 const product = getProductById(item.id)
@@ -354,14 +354,12 @@ export default function AccountPage() {
                   <motion.div
                     key={index}
                     className="flex items-center gap-4"
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ 
-                      delay: isNewItem ? (index - (displayedItemsCount - 10)) * 0.1 : 0.6 + index * 0.05, 
-                      duration: 0.4,
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 25
+                      delay: isNewItem ? (index - (displayedItemsCount - 10)) * 0.05 : index * 0.02, 
+                      duration: 0.3,
+                      ease: "easeOut"
                     }}
                   >
                     <ImageWithPlaceholder
@@ -392,7 +390,7 @@ export default function AccountPage() {
               })}
               
               {displayedItemsCount < history.length && (
-                <div ref={observerRef} className="flex justify-center py-4">
+                <div className="flex justify-center py-4">
                   {isLoadingMore && (
                     <motion.div
                       className="w-6 h-6 border-2 border-t-transparent rounded-full"
@@ -401,6 +399,7 @@ export default function AccountPage() {
                       transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                     />
                   )}
+                  <div ref={observerRef} className="h-1" />
                 </div>
               )}
             </motion.div>

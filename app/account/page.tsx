@@ -116,7 +116,7 @@ export default function AccountPage() {
       <motion.div
         className="flex flex-col items-center py-8"
         style={{
-          paddingTop: `calc(var(--tg-safe-area-inset-top) + 44px + 32px)`, 
+          paddingTop: `calc(var(--tg-safe-area-inset-top) + 44px)`, 
         }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -91,7 +91,7 @@ export function BottomNavigation() {
       animate={{ y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex items-center justify-around py-2.5">
+      <div className="flex items-center justify-around pt-2.5">
         <motion.button
           onClick={handleStoreClick}
           className="flex flex-col items-center gap-1 relative"

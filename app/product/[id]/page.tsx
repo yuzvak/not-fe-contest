@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useStore } from "@/store"
 import { ProductDetail } from "@/features/product/components/product-detail"
 import { CartModal } from "@/features/cart/components/cart-modal"
@@ -10,14 +10,37 @@ import type { Product } from "@/types"
 
 export default function ProductPage() {
   const params = useParams()
+  const router = useRouter()
   const products = useStore((state) => state.products)
   const fetchProducts = useStore((state) => state.fetchProducts)
   const getProductById = useStore((state) => state.getProductById)
   const isCartOpen = useStore((state) => state.isCartOpen)
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
+  const [shouldRedirect, setShouldRedirect] = useState(false)
 
   useEffect(() => {
+    const checkIfFromTelegram = () => {
+      const referrer = document.referrer
+      const userAgent = navigator.userAgent
+      const isFromTelegram = referrer.includes('t.me') || userAgent.includes('Telegram')
+      const hasNavigationHistory = window.history.length > 1
+      
+      if (isFromTelegram && !hasNavigationHistory) {
+        setShouldRedirect(true)
+        router.replace('/')
+        setTimeout(() => {
+          router.push(`/product/${params.id}`)
+        }, 100)
+        return true
+      }
+      return false
+    }
+
+    if (checkIfFromTelegram()) {
+      return
+    }
+
     const loadProduct = async () => {
       try {
         const cachedProduct = localStorage.getItem(`product-${params.id}`)
@@ -64,7 +87,15 @@ export default function ProductPage() {
     }
 
     loadProduct()
-  }, [params.id, products, fetchProducts, getProductById])
+  }, [params.id, products, fetchProducts, getProductById, router])
+
+  if (shouldRedirect) {
+    return (
+      <div className="fixed inset-0 bg-black text-white flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
+      </div>
+    )
+  }
 
   if (loading) {
     return (

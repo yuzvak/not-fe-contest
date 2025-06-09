@@ -127,49 +127,89 @@ export default function AccountPage() {
   }, [fetchHistory, fetchProducts, products.length])
 
   const loadMoreItems = useCallback(() => {
-    if (isLoadingMore || displayedItemsCount >= history.length) return
+    console.log('loadMoreItems called:', { isLoadingMore, displayedItemsCount, historyLength: history.length })
+    if (isLoadingMore || displayedItemsCount >= history.length) {
+      console.log('loadMoreItems blocked:', { isLoadingMore, displayedItemsCount, historyLength: history.length })
+      return
+    }
     
+    console.log('Loading more items...')
     setIsLoadingMore(true)
+    setDisplayedItemsCount(prev => {
+      const newCount = Math.min(prev + 25, history.length)
+      console.log('Updated displayedItemsCount:', prev, '->', newCount)
+      return newCount
+    })
     setTimeout(() => {
-      setDisplayedItemsCount(prev => Math.min(prev + 10, history.length))
       setIsLoadingMore(false)
-    }, 100)
+    }, 50)
   }, [isLoadingMore, displayedItemsCount, history.length])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0]
+        console.log('Observer triggered:', { 
+          isIntersecting: entry.isIntersecting, 
+          isHistoryLoading, 
+          isLoadingMore, 
+          isInitialLoading,
+          historyLength: history.length,
+          displayedItemsCount 
+        })
         
         if (entry.isIntersecting && 
             !isHistoryLoading && 
             !isLoadingMore && 
             !isInitialLoading && 
-            history.length > 0 && 
+            history.length > 0 &&
             displayedItemsCount < history.length) {
+          console.log('Calling loadMoreItems from observer')
           loadMoreItems()
         }
       },
-      { threshold: 0, rootMargin: '300px' }
+      { threshold: 0.1, rootMargin: '200px' }
     )
 
-    const currentRef = observerRef.current
-    
-    if (currentRef) {
-      observer.observe(currentRef)
+    const setupObserver = () => {
+      const currentRef = observerRef.current
+      console.log('Observer setup:', { currentRef: !!currentRef, canLoadMore: displayedItemsCount < history.length })
+      
+      if (currentRef && displayedItemsCount < history.length) {
+        observer.observe(currentRef)
+        console.log('Observer attached to ref')
+        return true
+      }
+      return false
+    }
+
+    if (!setupObserver() && displayedItemsCount < history.length) {
+      let attempts = 0
+      const maxAttempts = 5
+      
+      const retrySetup = () => {
+        attempts++
+        if (setupObserver() || attempts >= maxAttempts) {
+          return
+        }
+        setTimeout(retrySetup, 100 * attempts)
+      }
+      
+      setTimeout(retrySetup, 100)
+      
+      return () => {
+        observer.disconnect()
+      }
     }
 
     return () => {
+      const currentRef = observerRef.current
       if (currentRef) {
         observer.unobserve(currentRef)
       }
       observer.disconnect()
     }
   }, [loadMoreItems, isHistoryLoading, isLoadingMore, isInitialLoading, history.length, displayedItemsCount])
-
-  const formatPrice = (price: number) => {
-    return (price / 1000).toFixed(0)
-  }
 
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp * 1000)
@@ -349,16 +389,16 @@ export default function AccountPage() {
             >
               {history.slice(0, displayedItemsCount).map((item, index) => {
                 const product = getProductById(item.id)
-                const isNewItem = index >= displayedItemsCount - 10 && index < displayedItemsCount
+                const isNewItem = index >= displayedItemsCount - 25 && index < displayedItemsCount
                 return (
                   <motion.div
                     key={index}
                     className="flex items-center gap-4"
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    initial={{ opacity: 0, y: 5, scale: 0.99 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ 
-                      delay: isNewItem ? (index - (displayedItemsCount - 10)) * 0.05 : index * 0.02, 
-                      duration: 0.3,
+                      delay: isNewItem ? (index - (displayedItemsCount - 25)) * 0.02 : 0, 
+                      duration: 0.15,
                       ease: "easeOut"
                     }}
                   >
@@ -382,7 +422,7 @@ export default function AccountPage() {
                         {formatDate(item.timestamp)}
                       </div>
                       <div className="font-bold" style={{ color: textColor }}>
-                        {formatPrice(item.total)} {item.currency}
+                        {item.total} {item.currency}
                       </div>
                     </div>
                   </motion.div>
@@ -390,18 +430,19 @@ export default function AccountPage() {
               })}
               
               {displayedItemsCount < history.length && (
-                <div className="flex justify-center py-4">
-                  {isLoadingMore && (
-                    <motion.div
-                      className="w-6 h-6 border-2 border-t-transparent rounded-full"
-                      style={{ borderColor: hintColor }}
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    />
-                  )}
-                  <div ref={observerRef} className="h-1" />
-                </div>
+                <div ref={observerRef} className="h-4 w-full bg-transparent" style={{ minHeight: '1px' }} />
               )}
+              
+              <div className="flex justify-center py-4">
+                {isLoadingMore && displayedItemsCount < history.length && (
+                  <motion.div
+                    className="w-6 h-6 border-2 border-t-transparent rounded-full"
+                    style={{ borderColor: hintColor }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                  />
+                )}
+              </div>
             </motion.div>
            )}
          </AnimatePresence>

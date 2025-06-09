@@ -815,6 +815,7 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
             style={{
               backgroundColor: "#FF3B30",
               color: "#FFFFFF",
+              marginBottom: "var(--tg-safe-area-inset-bottom)",
             }}
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

@@ -65,7 +65,7 @@ Next.js provides the perfect foundation for this Telegram Mini App because:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/yuzvak/not-fe-contest
 cd not-store
 
 # Install dependencies
@@ -78,7 +78,7 @@ npm run dev
 # or
 yarn dev
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the app.
+Open http://localhost:3000 in your browser to see the app.
 
 ### Build for Production
 

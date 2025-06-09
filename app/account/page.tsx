@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useStore } from "@/store"
 import { BottomNavigation } from "@/components/layout/bottom-navigation"
@@ -16,6 +16,10 @@ export default function AccountPage() {
   const fetchHistory = useStore((state) => state.fetchHistory)
   const products = useStore((state) => state.products)
   const fetchProducts = useStore((state) => state.fetchProducts)
+  
+  const [displayedItemsCount, setDisplayedItemsCount] = useState(15)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const observerRef = useRef<HTMLDivElement>(null)
 
   const bgColor = colorScheme === "light" ? "#ffffff" : "#000000"
   const textColor = themeParams.text_color || (colorScheme === "light" ? "#000000" : "#ffffff")
@@ -31,6 +35,33 @@ export default function AccountPage() {
       fetchProducts()
     }
   }, [fetchHistory, fetchProducts, products.length])
+
+  const loadMoreItems = useCallback(() => {
+    if (isLoadingMore || displayedItemsCount >= history.length) return
+    
+    setIsLoadingMore(true)
+    setTimeout(() => {
+      setDisplayedItemsCount(prev => Math.min(prev + 10, history.length))
+      setIsLoadingMore(false)
+    }, 300)
+  }, [isLoadingMore, displayedItemsCount, history.length])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isHistoryLoading) {
+          loadMoreItems()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [loadMoreItems, isHistoryLoading])
 
   const formatPrice = (price: number) => {
     return (price / 1000).toFixed(0)
@@ -201,7 +232,7 @@ export default function AccountPage() {
           </motion.div>
         ) : (
           <div className="space-y-4">
-            {history.map((item, index) => {
+            {history.slice(0, displayedItemsCount).map((item, index) => {
               const product = getProductById(item.id)
               return (
                 <motion.div
@@ -239,6 +270,23 @@ export default function AccountPage() {
                 </motion.div>
               )
             })}
+            
+            {displayedItemsCount < history.length && (
+              <div ref={observerRef} className="flex justify-center py-4">
+                {isLoadingMore ? (
+                  <motion.div
+                    className="w-6 h-6 border-2 border-t-transparent rounded-full"
+                    style={{ borderColor: hintColor }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                  />
+                ) : (
+                  <div className="text-sm" style={{ color: hintColor }}>
+                    Scroll to load more...
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </motion.div>

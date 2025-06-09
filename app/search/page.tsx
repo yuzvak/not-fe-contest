@@ -243,7 +243,7 @@ export default function SearchPage() {
                     {product.category} {product.name}
                   </h3>
 
-                  <p className="text-lg font-bold" style={{ color: textColor }}>
+                  <p className="text-lg" style={{ color: textColor }}>
                     {product.price} <span className="text-gray-400">{product.currency}</span>
                   </p>
                 </motion.div>

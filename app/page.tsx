@@ -27,6 +27,7 @@ export default function HomePage() {
 
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
+  const [hasProcessedStartParam, setHasProcessedStartParam] = useState(false)
 
   const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false)
   const bgColor = colorScheme === "light" ? "#ffffff" : "#000000"
@@ -49,18 +50,19 @@ export default function HomePage() {
       error,
     })
 
-    if (typeof window !== "undefined" && window.Telegram?.WebApp) {
+    if (typeof window !== "undefined" && window.Telegram?.WebApp && !hasProcessedStartParam) {
       const webApp = window.Telegram.WebApp
       const startParam = webApp.initDataUnsafe?.start_param
       
       if (startParam && startParam.startsWith("product_")) {
         const productId = startParam.replace("product_", "")
         console.log("🔗 Opening product from start param:", productId)
+        setHasProcessedStartParam(true)
         router.push(`/product/${productId}`)
       }
     }
 
-  }, [hideBackButton, requestFullscreen, router])
+  }, [hideBackButton, requestFullscreen, router, hasProcessedStartParam])
 
   useEffect(() => {
     if (products.length > 0 && !hasInitiallyLoaded) {

@@ -11,6 +11,12 @@ export const metadata: Metadata = {
   title: "Not Store",
   description: "Telegram Mini App Store",
   generator: "v0.dev",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 }
 
 export default function RootLayout({

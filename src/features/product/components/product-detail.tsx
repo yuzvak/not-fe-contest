@@ -41,6 +41,7 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
   const [stockError, setStockError] = useState(false)
 
   const imageContainerRef = useRef<HTMLDivElement>(null)
+  const thumbnailsContainerRef = useRef<HTMLDivElement>(null)
 
   const cartItem = items.find((item) => item.id === product.id)
   const isInCart = !!cartItem
@@ -100,6 +101,28 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
   useEffect(() => {
     setCurrentImage(0)
   }, [])
+
+  useEffect(() => {
+    if (thumbnailsContainerRef.current && product.images.length > 1) {
+      const container = thumbnailsContainerRef.current
+      const activeButton = container.children[currentImage] as HTMLElement
+      
+      if (activeButton) {
+        const containerRect = container.getBoundingClientRect()
+        const buttonRect = activeButton.getBoundingClientRect()
+        
+        const isVisible = buttonRect.left >= containerRect.left && buttonRect.right <= containerRect.right
+        
+        if (!isVisible) {
+          const scrollLeft = activeButton.offsetLeft - (container.clientWidth / 2) + (activeButton.clientWidth / 2)
+          container.scrollTo({
+            left: scrollLeft,
+            behavior: 'smooth'
+          })
+        }
+      }
+    }
+  }, [currentImage, product.images.length])
 
   const formatPrice = (price: number) => {
     return price
@@ -510,12 +533,10 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
             </div>
           </div>
 
-          {/* Bottom Section - адаптивная компоновка */}
           <div className={`flex-shrink-0 ${isWideScreen ? "mt-4" : "mt-6"}`}>
-            {/* Image Thumbnails - показываем все доступные изображения */}
             {imagesLoaded && product.images.length > 1 && (
               <div className={`${isWideScreen ? "mb-4" : "mb-6"}`}>
-                <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                <div ref={thumbnailsContainerRef} className="flex gap-2 overflow-x-auto pb-2 no-scrollbar md:justify-center">
                   {product.images.map((image, index) => (
                     <button
                       key={index}

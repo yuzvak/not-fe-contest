@@ -454,7 +454,7 @@ function ProductDetailComponent({ product }: ProductDetailProps) {
         <div className="flex-1 flex flex-col min-h-0 px-4">
           {/* Main Product Image */}
           <div
-            className={`relative w-full rounded-3xl overflow-hidden cursor-pointer ${isWideScreen ? "h-64" : "flex-1"}`}
+            className={`relative w-full rounded-3xl overflow-hidden cursor-pointer ${isWideScreen ? "h-full" : "flex-1"}`}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}

@@ -29,7 +29,7 @@ function ProductCardComponent({
 }: ProductCardProps) {
   const router = useRouter()
   const { hapticFeedback, colorScheme, themeParams } = useTelegram()
-  const [currentImage, setCurrentImage] = useState(0)
+  const [currentImage, setCurrentImage] = useState((product.id - 1) % product.images.length)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -126,19 +126,22 @@ function ProductCardComponent({
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX)
-    setIsDragging(true)
-
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current)
-      longPressTimer.current = null
+    const currentX = e.targetTouches[0].clientX
+    setTouchEnd(currentX)
+    
+    const swipeDistance = Math.abs(touchStart - currentX)
+    
+    if (swipeDistance > 5) {
+      setIsDragging(true)
+      
+      if (longPressTimer.current) {
+        clearTimeout(longPressTimer.current)
+        longPressTimer.current = null
+      }
     }
 
-    if (!isSelectionMode && product.images.length > 1) {
-      const swipeDistance = Math.abs(touchStart - e.targetTouches[0].clientX)
-      if (swipeDistance > 10) {
-        e.preventDefault()
-      }
+    if (!isSelectionMode && product.images.length > 1 && swipeDistance > 10) {
+      e.preventDefault()
     }
   }
 
@@ -148,26 +151,24 @@ function ProductCardComponent({
       longPressTimer.current = null
     }
 
-    if (!isDragging || isSelectionMode) {
+    if (!isDragging || isSelectionMode || product.images.length <= 1) {
       setIsDragging(false)
       return
     }
 
-    const minSwipeDistance = 50
+    const minSwipeDistance = 30
     const swipeDistance = touchStart - touchEnd
+    const swipeVelocity = Math.abs(swipeDistance)
 
-    if (Math.abs(swipeDistance) < minSwipeDistance) {
-      setIsDragging(false)
-      return
+    if (swipeVelocity >= minSwipeDistance) {
+      if (swipeDistance > 0) {
+        nextImage()
+      } else {
+        prevImage()
+      }
     }
 
-    if (swipeDistance > 0) {
-      nextImage()
-    } else {
-      prevImage()
-    }
-
-    setIsDragging(false)
+    setTimeout(() => setIsDragging(false), 100)
   }
 
   const nextImage = () => {
@@ -231,10 +232,18 @@ function ProductCardComponent({
       >
         <div className="relative w-full h-full">
           {product.images.map((image, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className="absolute inset-0 w-full h-full transition-opacity duration-300"
-              style={{ opacity: idx === currentImage ? 1 : 0 }}
+              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0 }}
+              animate={{ 
+                opacity: idx === currentImage ? 1 : 0,
+                scale: idx === currentImage ? 1 : 1.05
+              }}
+              transition={{ 
+                duration: 0.4,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
             >
               <Image
                 src={image || "/placeholder.svg"}
@@ -245,7 +254,7 @@ function ProductCardComponent({
                 priority={index < 4 && idx === 0}
                 loading={index < 4 || idx === 0 ? "eager" : "lazy"}
               />
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -299,7 +308,9 @@ function ProductCardComponent({
             {product.images.map((_, imgIndex) => (
               <div
                 key={imgIndex}
-                className={`h-1 rounded-full ${imgIndex === currentImage ? "w-6 bg-white" : "w-1 bg-white/50"}`}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  imgIndex === currentImage ? "w-6 bg-white" : "w-1 bg-white/50"
+                }`}
               />
             ))}
           </div>

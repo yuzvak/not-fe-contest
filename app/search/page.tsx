@@ -214,7 +214,7 @@ export default function SearchPage() {
           ) : showResults ? (
             <motion.div
               key="results"
-              className="grid grid-cols-2 gap-4"
+              className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -231,7 +231,7 @@ export default function SearchPage() {
                 >
                   <div className="aspect-square relative rounded-lg overflow-hidden mb-2">
                     <Image
-                      src={product.images[0] || "/placeholder.svg?width=400&height=400&query=clothing item"}
+                      src={product.images[product.id - 1] || "/placeholder.svg?width=400&height=400&query=clothing item"}
                       alt={product.name}
                       fill
                       className="object-cover"

@@ -45,7 +45,7 @@ export function ProductGrid({
   }
 
   return (
-    <motion.div className="grid grid-cols-2 gap-4 px-4 py-4" variants={container} initial="hidden" animate="show">
+    <motion.div className="grid grid-cols-2 gap-4 px-4 py-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-8" variants={container} initial="hidden" animate="show">
       {products.map((product, index) => (
         <motion.div key={product.id} variants={item} layout>
           <ProductCard

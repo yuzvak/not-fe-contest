@@ -403,7 +403,7 @@ export default function AccountPage() {
                     }}
                   >
                     <ImageWithPlaceholder
-                      src={product?.images[0] || "/placeholder.svg"}
+                      src={`https://not-contest-cdn.openbuilders.xyz/items/${item.id}.${item.id === 6 ? 'png' : 'jpg'}`} // thanks for creating troubles for this :D
                       alt={product?.name || "Product"}
                       width={64}
                       height={64}
